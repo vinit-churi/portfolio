@@ -9,7 +9,7 @@ export default async function EvolutionSection() {
     .orderBy(asc(workRoles.sortOrder));
 
   return (
-    <section id="work" className="bg-surface py-16 border-y border-white/5">
+    <section id="evolution" className="bg-surface py-16 border-y border-white/5">
       <div className="max-w-7xl mx-auto px-8">
         <h3 className="font-headline text-3xl font-bold text-white mb-10 tracking-tight text-center md:text-left">
           Evolution

@@ -40,7 +40,7 @@
   --color-surface: #131313;
   --color-on-surface: #e5e2e1;
   --color-surface-variant: #353534;
-  --color-on-surface-variant: #c6c6c6;
+  --color-on-surface-variant: #d4d4d4;
   --color-surface-dim: #131313;
   --color-surface-bright: #393939;
   --color-surface-container-lowest: #0e0e0e;
@@ -49,8 +49,8 @@
   --color-surface-container-high: #2a2a2a;
   --color-surface-container-highest: #353534;
 
-  --color-outline: #919191;
-  --color-outline-variant: #474747;
+  --color-outline: #b3b3b3;
+  --color-outline-variant: #5a5a5a;
   --color-inverse-surface: #e5e2e1;
   --color-inverse-on-surface: #313030;
   --color-surface-tint: #c6c6c7;
@@ -85,4 +85,136 @@
 }
 ::-webkit-scrollbar-thumb {
   background: #353534;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  padding: 0.75rem 1rem;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+}
+
+/* ── Tiptap / sanitized HTML body ───────────────────── */
+.prose-body {
+  color: var(--color-on-surface);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+.prose-body :where(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-headline);
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+.prose-body h1 { font-size: 2rem; margin: 2.5rem 0 1rem; }
+.prose-body h2 { font-size: 1.5rem; margin: 2rem 0 0.75rem; }
+.prose-body h3 { font-size: 1.25rem; margin: 1.5rem 0 0.5rem; }
+.prose-body h4 { font-size: 1.05rem; margin: 1.25rem 0 0.5rem; }
+.prose-body p { margin: 0 0 1.1rem; }
+.prose-body a {
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+.prose-body a:hover {
+  text-decoration-thickness: 2px;
+}
+.prose-body strong { color: #fff; }
+.prose-body em { font-style: italic; }
+.prose-body ul,
+.prose-body ol {
+  margin: 0 0 1.1rem;
+  padding-left: 1.5rem;
+}
+.prose-body ul { list-style: disc; }
+.prose-body ol { list-style: decimal; }
+.prose-body li { margin: 0.25rem 0; }
+.prose-body li > p { margin: 0; }
+.prose-body blockquote {
+  border-left: 2px solid var(--color-outline-variant);
+  margin: 1.25rem 0;
+  padding: 0.25rem 0 0.25rem 1rem;
+  color: var(--color-on-surface-variant);
+  font-style: italic;
+}
+.prose-body code {
+  background: var(--color-surface-container);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0.1rem 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  border-radius: 2px;
+}
+.prose-body pre {
+  background: var(--color-surface-container-lowest);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 1rem;
+  margin: 1.25rem 0;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+.prose-body pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+.prose-body hr {
+  border: 0;
+  border-top: 1px solid var(--color-outline-variant);
+  margin: 2rem 0;
+}
+.prose-body img {
+  max-width: 100%;
+  height: auto;
+  margin: 1.5rem 0;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+.prose-body table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1.25rem 0;
+  font-size: 0.9rem;
+}
+.prose-body th,
+.prose-body td {
+  border: 1px solid var(--color-outline-variant);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+.prose-body th {
+  background: var(--color-surface-container);
+  font-weight: 600;
+}
+
+/* Tiptap placeholder */
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: var(--color-outline);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+.ProseMirror:focus {
+  outline: none;
 }

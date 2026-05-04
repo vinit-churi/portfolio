@@ -32,8 +32,8 @@ import AdminClient from "../AdminClient";
 const PLACEHOLDER_WARNINGS = [
   { tab: "Roles", warning: "Companies (QuantLogix, DataLayer, OpenSource Foundries) are placeholders — replace with real history" },
   { tab: "Stats", warning: "All 4 metrics are fabricated — update with real numbers or remove" },
-  { tab: "Articles", warning: "3 seed articles are placeholder — replace with real writing" },
-  { tab: "Ledger", warning: "3 seed entries are placeholder — replace with real recent activity" },
+  { tab: "Journal", warning: "Seed articles are placeholders — replace with real writing" },
+  { tab: "Ledger", warning: "Seed entries are placeholders — replace with real recent activity" },
 ];
 
 export default async function AdminPage() {

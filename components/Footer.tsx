@@ -1,3 +1,6 @@
+import { Mail } from "lucide-react";
+import SubscribeForm from "./SubscribeForm";
+
 const socialLinks = [
   { label: "GitHub", href: "https://github.com/vinit-churi" },
   { label: "Twitter", href: "https://x.com/vinitchuri0312" },
@@ -6,31 +9,30 @@ const socialLinks = [
 
 export default function Footer() {
   return (
-    <footer id="contact" className="bg-surface-container-lowest border-t border-white/5 py-12 px-8">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
-        <div className="space-y-4 text-center md:text-left">
-          <h2 className="font-headline text-3xl font-extrabold text-white tracking-tighter">
-            Let&apos;s build the future
-          </h2>
+    <footer
+      id="contact"
+      className="bg-surface-container-lowest border-t border-white/5 py-12 px-8 mt-auto"
+    >
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12">
+        <div className="md:col-span-7 space-y-8">
+          <div className="space-y-4">
+            <h2 className="font-headline text-3xl font-extrabold text-white tracking-tighter">
+              Let&apos;s build the future
+            </h2>
 
-          <div className="flex flex-col md:flex-row gap-6">
             <a
               href="mailto:vinitchuri0312@gmail.com"
-              className="group flex items-center gap-3"
+              className="group inline-flex items-center gap-3"
             >
-              <div className="w-10 h-10 bg-white/5 flex items-center justify-center group-hover:bg-primary transition-colors">
-                <span className="material-symbols-outlined text-sm group-hover:text-on-primary">
-                  mail
-                </span>
-              </div>
+              <span className="w-10 h-10 bg-white/5 flex items-center justify-center group-hover:bg-primary transition-colors">
+                <Mail size={16} className="text-on-surface group-hover:text-on-primary" />
+              </span>
               <span className="font-headline font-bold text-lg text-white">
                 vinitchuri0312@gmail.com
               </span>
             </a>
 
-            <div className="hidden md:block w-px h-10 bg-white/10 self-center" />
-
-            <div className="flex gap-4 items-center justify-center">
+            <div className="flex flex-wrap gap-4 items-center">
               {socialLinks.map((link) => (
                 <a
                   key={link.label}
@@ -44,9 +46,11 @@ export default function Footer() {
               ))}
             </div>
           </div>
+
+          <SubscribeForm />
         </div>
 
-        <div className="flex flex-col items-center md:items-end gap-2">
+        <div className="md:col-span-5 flex flex-col md:items-end gap-2 md:justify-end">
           <div className="font-headline font-black text-lg tracking-widest text-white">
             VINIT.DEV
           </div>
