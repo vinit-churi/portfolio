@@ -10,7 +10,7 @@ import {
   research,
 } from "@/lib/schema";
 import { eq, asc } from "drizzle-orm";
-import AdminClient from "./AdminClient";
+import AdminClient from "../AdminClient";
 
 // CMS-managed vs static — reference for what needs real data:
 //
