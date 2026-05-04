@@ -1,13 +1,9 @@
-"use client";
-
-import { useEffect, useState } from "react";
-
 const CELL_CLASSES = [
-  "bg-neutral-900",
-  "bg-neutral-800",
+  "bg-white/[0.04]",
+  "bg-white/[0.08]",
   "bg-white/20",
   "bg-white/40",
-  "bg-white/60",
+  "bg-white/65",
   "bg-white",
 ];
 
@@ -23,21 +19,29 @@ function pickClass(seed: number): string {
 }
 
 export default function ContributionGrid() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return <div className="flex flex-wrap gap-1 mb-8 min-h-[4rem]" />;
-  }
-
   return (
-    <div className="flex flex-wrap gap-1 mb-8">
-      {Array.from({ length: 126 }, (_, i) => (
-        <div key={i} className={`w-3 h-3 rounded-sm ${pickClass(i + 7)}`} />
-      ))}
+    <div className="space-y-2">
+      <div
+        className="grid grid-flow-col grid-rows-7 gap-[2px]"
+        role="img"
+        aria-label="Contribution density grid (visual texture)"
+      >
+        {Array.from({ length: 182 }, (_, i) => (
+          <span key={i} className={`w-[8px] h-[8px] ${pickClass(i + 7)}`} />
+        ))}
+      </div>
+      <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-widest text-outline">
+        <span>26 weeks</span>
+        <span className="flex items-center gap-1">
+          less
+          <span className="flex gap-[2px]">
+            {CELL_CLASSES.map((c) => (
+              <span key={c} className={`w-[8px] h-[8px] ${c}`} />
+            ))}
+          </span>
+          more
+        </span>
+      </div>
     </div>
   );
 }

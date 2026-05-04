@@ -38,16 +38,18 @@ export default async function ProjectsIndex({
 
   return (
     <section className="max-w-7xl mx-auto px-8 py-16">
-      <header className="mb-12">
-        <h2 className="text-xs uppercase tracking-[0.3em] text-outline mb-2 font-bold">
-          Work
-        </h2>
-        <h1 className="font-headline text-4xl md:text-5xl font-extrabold text-white tracking-tight">
-          Projects
-        </h1>
-        <p className="text-on-surface-variant mt-3 max-w-2xl">
-          Things I&apos;ve shipped, prototyped, or contributed to.
-        </p>
+      <header className="mb-12 flex items-end justify-between gap-6 flex-wrap">
+        <div>
+          <h2 className="text-[10px] uppercase tracking-[0.3em] text-outline mb-2 font-bold">
+            Built
+          </h2>
+          <h1 className="font-headline text-4xl md:text-5xl font-extrabold text-white tracking-tight">
+            Projects
+          </h1>
+        </div>
+        <span className="font-mono text-[11px] text-outline tabular-nums uppercase tracking-widest">
+          {String(total).padStart(3, "0")} shipped
+        </span>
       </header>
 
       {items.length === 0 ? (

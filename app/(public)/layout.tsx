@@ -10,7 +10,7 @@ export default function PublicLayout({
     <>
       <a href="#main" className="skip-link">Skip to content</a>
       <NavBar />
-      <main id="main" className="pt-24 min-h-[calc(100vh-3.5rem)]">{children}</main>
+      <main id="main" className="pt-16 md:pt-20 min-h-[60vh]">{children}</main>
       <Footer />
     </>
   );

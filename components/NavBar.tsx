@@ -5,17 +5,37 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navLinks = [
-  { label: "Projects", href: "/projects" },
-  { label: "Journal", href: "/journal" },
-  { label: "Research", href: "/research" },
-  { label: "Activity", href: "/#activity" },
-  { label: "Contact", href: "/#contact" },
+  { label: "Projects", href: "/projects", section: "work" },
+  { label: "Writing", href: "/journal", section: "writing" },
+  { label: "Research", href: "/research", section: "writing" },
+  { label: "Activity", href: "/#activity", section: "activity" },
 ];
+
+const HOME_SECTIONS = ["work", "writing", "activity", "evolution", "expertise", "hero"];
 
 export default function NavBar() {
   const [open, setOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<string | null>(null);
   const pathname = usePathname();
   const triggerRef = useRef<HTMLButtonElement | null>(null);
+
+  useEffect(() => {
+    if (pathname !== "/") return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (visible[0]?.target.id) setActiveSection(visible[0].target.id);
+      },
+      { rootMargin: "-40% 0px -50% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] }
+    );
+    HOME_SECTIONS.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, [pathname]);
 
   useEffect(() => {
     if (!open) return;
@@ -29,15 +49,17 @@ export default function NavBar() {
     return () => document.removeEventListener("keydown", onKey);
   }, [open]);
 
-  function isActive(href: string) {
-    if (href.startsWith("/#")) return false;
-    if (href === "/") return pathname === "/";
-    return pathname === href || pathname.startsWith(href + "/");
+  function isActive(link: (typeof navLinks)[number]) {
+    if (link.href.startsWith("/#")) {
+      return pathname === "/" && activeSection === link.section;
+    }
+    if (pathname === "/" && activeSection === link.section) return true;
+    return pathname === link.href || pathname.startsWith(link.href + "/");
   }
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-surface-container-lowest/70 backdrop-blur-xl transition-all duration-300 ease-in-out">
-      <div className="flex justify-between items-center px-8 py-6 w-full max-w-7xl mx-auto">
+    <nav className="fixed top-0 w-full z-50 bg-surface-container-lowest/70 backdrop-blur-xl">
+      <div className="flex justify-between items-center px-8 py-5 w-full max-w-7xl mx-auto">
         <Link
           href="/"
           className="text-xl font-bold tracking-tighter text-white font-headline"
@@ -51,7 +73,7 @@ export default function NavBar() {
               key={link.label}
               href={link.href}
               className={`font-headline tracking-tight text-sm uppercase transition-colors ${
-                isActive(link.href)
+                isActive(link)
                   ? "text-white"
                   : "text-on-surface-variant hover:text-white"
               }`}
@@ -62,12 +84,12 @@ export default function NavBar() {
         </div>
 
         <div className="flex items-center gap-4">
-          <Link
-            href="/#contact"
+          <a
+            href="mailto:vinitchuri0312@gmail.com"
             className="hidden md:block bg-primary text-on-primary px-5 py-2 text-xs font-bold uppercase tracking-widest hover:bg-surface-bright transition-colors"
           >
-            Let&apos;s Build
-          </Link>
+            Email
+          </a>
 
           <button
             ref={triggerRef}
@@ -114,13 +136,13 @@ export default function NavBar() {
               <span className="text-outline text-xs">→</span>
             </Link>
           ))}
-          <Link
-            href="/#contact"
+          <a
+            href="mailto:vinitchuri0312@gmail.com"
             onClick={() => setOpen(false)}
             className="block mt-4 bg-primary text-on-primary px-5 py-3 text-xs font-bold uppercase tracking-widest hover:bg-surface-bright transition-colors text-center"
           >
-            Let&apos;s Build
-          </Link>
+            Email
+          </a>
         </div>
       </div>
     </nav>

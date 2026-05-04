@@ -1,100 +1,120 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import { listPublished, parseTags } from "@/lib/content";
 
 export default async function ProjectsSection() {
   const all = await listPublished("projects", { limit: 4 });
   if (all.length === 0) return null;
 
-  return (
-    <section id="work" className="max-w-7xl mx-auto px-8 py-16 bg-background">
-      <div className="flex justify-between items-end mb-10">
-        <div>
-          <h2 className="text-xs uppercase tracking-[0.3em] text-outline mb-2 font-bold">
-            Work
-          </h2>
-          <h3 className="font-headline text-3xl font-bold text-white tracking-tight">
-            Projects
-          </h3>
-        </div>
-        <Link
-          href="/projects"
-          className="text-xs font-bold uppercase tracking-widest text-primary border-b border-primary/50 pb-1 hover:border-primary transition-all"
-        >
-          View All
-        </Link>
-      </div>
+  const [primary, ...rest] = all;
+  const primaryTags = parseTags(primary.tags);
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {all.map((project) => {
-          const tags = parseTags(project.tags);
-          return (
-            <div
-              key={project.id}
-              className="group border border-white/5 bg-surface-container p-6 hover:border-white/10 transition-all"
-            >
-              {project.image && (
-                <Link href={`/projects/${project.slug}`} className="block">
-                  <div className="aspect-video bg-surface overflow-hidden mb-6 relative">
-                    <Image
-                      src={project.image}
-                      alt={project.imageAlt || project.title}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                      className="object-cover grayscale opacity-60 group-hover:scale-105 group-hover:opacity-90 transition-all duration-700"
-                    />
-                  </div>
-                </Link>
-              )}
-              <div className="flex flex-wrap gap-2 mb-3">
-                {tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-xs px-2 py-1 bg-surface-container-highest border border-white/5 uppercase font-mono"
+  return (
+    <section id="work" className="bg-background py-20">
+      <div className="max-w-7xl mx-auto px-8">
+        <div className="flex items-end justify-between mb-10">
+          <div>
+            <h2 className="text-[10px] uppercase tracking-[0.3em] text-outline mb-2 font-bold">
+              Built
+            </h2>
+            <h3 className="font-headline text-3xl md:text-4xl font-extrabold text-white tracking-tight">
+              Projects
+            </h3>
+          </div>
+          <Link
+            href="/projects"
+            className="text-[11px] font-mono uppercase tracking-widest text-outline hover:text-white transition-colors"
+          >
+            All projects →
+          </Link>
+        </div>
+
+        <Link
+          href={`/projects/${primary.slug}`}
+          className="group grid grid-cols-1 md:grid-cols-12 gap-8 border-t border-white/5 pt-10 mb-12"
+        >
+          <div className="md:col-span-7 relative aspect-[16/10] bg-surface-container-low overflow-hidden">
+            {primary.image ? (
+              <Image
+                src={primary.image}
+                alt={primary.imageAlt || primary.title}
+                fill
+                sizes="(max-width: 768px) 100vw, 60vw"
+                className="object-cover grayscale opacity-70 group-hover:opacity-95 transition-opacity duration-500"
+              />
+            ) : (
+              <div className="absolute inset-0 grid place-items-center">
+                <span className="font-mono text-[10px] uppercase tracking-widest text-outline-variant">
+                  no preview
+                </span>
+              </div>
+            )}
+          </div>
+
+          <div className="md:col-span-5 flex flex-col gap-4 justify-end">
+            <span className="font-mono text-[11px] text-outline uppercase tracking-widest">
+              Latest · #{String(primary.id).padStart(3, "0")}
+            </span>
+            <h4 className="font-headline text-2xl md:text-3xl font-extrabold text-white group-hover:text-primary transition-colors leading-[1.05] tracking-tight">
+              {primary.title}
+            </h4>
+            <p className="text-sm text-on-surface-variant leading-relaxed line-clamp-3">
+              {primary.description}
+            </p>
+            {primaryTags.length > 0 && (
+              <ul className="flex flex-wrap gap-1.5">
+                {primaryTags.map((t) => (
+                  <li
+                    key={t}
+                    className="text-[10px] font-mono px-2 py-0.5 border border-white/10 text-on-surface-variant uppercase tracking-wide"
                   >
-                    {tag}
-                  </span>
+                    {t}
+                  </li>
                 ))}
-              </div>
-              <Link href={`/projects/${project.slug}`} className="block">
-                <h4 className="font-headline font-bold text-white text-lg group-hover:text-primary transition-colors mb-2">
-                  {project.title}
-                </h4>
-                <p className="text-sm text-on-surface-variant leading-relaxed mb-4">
-                  {project.description}
-                </p>
-              </Link>
-              <div className="flex gap-4">
-                <Link
-                  href={`/projects/${project.slug}`}
-                  className="text-xs font-mono text-outline hover:text-primary transition-colors uppercase tracking-widest"
-                >
-                  Details →
-                </Link>
-                {project.githubUrl && (
-                  <a
-                    href={project.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs font-mono text-outline hover:text-primary transition-colors uppercase tracking-widest"
+              </ul>
+            )}
+            <span className="font-mono text-[11px] text-outline group-hover:text-primary transition-colors uppercase tracking-widest inline-flex items-center gap-1.5 mt-2">
+              Read details <ArrowUpRight size={12} />
+            </span>
+          </div>
+        </Link>
+
+        {rest.length > 0 && (
+          <ol className="border-t border-white/5">
+            {rest.map((project, idx) => {
+              const tags = parseTags(project.tags);
+              return (
+                <li key={project.id}>
+                  <Link
+                    href={`/projects/${project.slug}`}
+                    className="grid grid-cols-12 gap-4 md:gap-6 py-5 border-b border-white/5 group hover:bg-white/[0.015] transition-colors -mx-2 px-2"
                   >
-                    GitHub
-                  </a>
-                )}
-                {project.url && (
-                  <a
-                    href={project.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs font-mono text-outline hover:text-primary transition-colors uppercase tracking-widest"
-                  >
-                    Live
-                  </a>
-                )}
-              </div>
-            </div>
-          );
-        })}
+                    <span className="hidden md:block col-span-1 font-mono text-[11px] text-outline-variant tabular-nums pt-1">
+                      {String(idx + 2).padStart(2, "0")}
+                    </span>
+                    <span className="col-span-12 md:col-span-4 font-headline text-base font-bold text-white group-hover:text-primary transition-colors leading-snug">
+                      {project.title}
+                    </span>
+                    <span className="col-span-12 md:col-span-5 text-xs text-on-surface-variant leading-relaxed line-clamp-2">
+                      {project.description}
+                    </span>
+                    <span className="col-span-12 md:col-span-2 flex flex-wrap gap-1.5 md:justify-end items-start">
+                      {tags.slice(0, 2).map((t) => (
+                        <span
+                          key={t}
+                          className="text-[10px] font-mono px-1.5 py-0.5 border border-white/10 text-outline uppercase tracking-wide"
+                        >
+                          {t}
+                        </span>
+                      ))}
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ol>
+        )}
       </div>
     </section>
   );

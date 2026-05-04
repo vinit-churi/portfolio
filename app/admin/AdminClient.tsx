@@ -16,6 +16,7 @@ import ContentPanel, {
   type JournalLike,
   type ProjectLike,
 } from "@/components/admin/ContentPanel";
+import { iconFor, ICON_OPTIONS } from "@/lib/icons";
 
 type HeroConfig = {
   id: number;
@@ -842,7 +843,7 @@ function ExpertisePanel({ initial }: { initial: ExpertiseItem[] }) {
             New Item
           </p>
           <div className="grid grid-cols-2 gap-3">
-            <Field label="Icon (Material Symbol)">
+            <Field label={`Icon (${ICON_OPTIONS.slice(0, 4).join(", ")}, …)`}>
               <Input
                 value={newForm.icon}
                 onChange={(v) => setNewForm((f) => ({ ...f, icon: v }))}
@@ -921,9 +922,10 @@ function ExpertisePanel({ initial }: { initial: ExpertiseItem[] }) {
             <div className="flex items-start justify-between gap-4">
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="material-symbols-outlined text-sm text-primary">
-                    {it.icon}
-                  </span>
+                  {(() => {
+                    const Icon = iconFor(it.icon);
+                    return <Icon size={14} className="text-primary" />;
+                  })()}
                   <span className="text-sm text-white font-bold">{it.title}</span>
                 </div>
                 <p className="text-xs text-on-surface-variant">{it.description}</p>
