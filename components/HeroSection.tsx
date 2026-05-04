@@ -1,40 +1,52 @@
 import Image from "next/image";
+import { db } from "@/lib/db";
+import { heroConfig } from "@/lib/schema";
+import { eq } from "drizzle-orm";
 
-export default function HeroSection() {
+export default async function HeroSection() {
+  const [hero] = await db.select().from(heroConfig).where(eq(heroConfig.id, 1));
+
+  if (!hero) return null;
+
   return (
-    <section className="max-w-7xl mx-auto px-8 py-12 grid grid-cols-1 md:grid-cols-12 gap-8 items-center bg-surface">
+    <section
+      id="hero"
+      className="max-w-7xl mx-auto px-8 py-12 grid grid-cols-1 md:grid-cols-12 gap-8 items-center bg-surface"
+    >
       <div className="md:col-span-7 space-y-6">
-        <div className="inline-flex items-center gap-2 px-3 py-1 bg-surface-container-highest text-[10px] uppercase tracking-[0.2em] font-bold">
-          <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-          Available for complex scale
+        <div className="inline-flex items-center gap-2 px-3 py-1 bg-surface-container-highest text-xs uppercase tracking-[0.2em] font-bold">
+          <span
+            className={`w-2 h-2 rounded-full animate-pulse ${
+              hero.isAvailable ? "bg-primary" : "bg-red-500"
+            }`}
+          />
+          {hero.availabilityLabel}
         </div>
 
         <h1 className="font-headline text-5xl md:text-7xl font-extrabold tracking-tighter leading-[0.9] text-white">
-          Curiosity-driven engineering. Building for resilience and precision.
+          {hero.tagline}
         </h1>
 
         <p className="text-on-surface-variant max-w-lg text-sm leading-relaxed font-medium">
-          Specializing in low-latency infrastructure and distributed data
-          orchestration. I architect systems that don&apos;t just function—they
-          endure.
+          {hero.bio}
         </p>
 
         <div className="flex gap-4 pt-4">
           <div className="flex flex-col">
             <span className="text-xs uppercase tracking-widest text-outline mb-1">
-              Infrastructure
+              {hero.infraLabel}
             </span>
             <span className="font-mono text-sm text-primary">
-              AWS / K8s / Terraform
+              {hero.infraStack}
             </span>
           </div>
           <div className="w-px h-10 bg-white/10" />
           <div className="flex flex-col">
             <span className="text-xs uppercase tracking-widest text-outline mb-1">
-              Core Stack
+              {hero.coreLabel}
             </span>
             <span className="font-mono text-sm text-primary">
-              Go / Rust / PostgreSQL
+              {hero.coreStack}
             </span>
           </div>
         </div>
@@ -49,30 +61,16 @@ export default function HeroSection() {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent z-10" />
 
-        <div className="absolute bottom-6 left-6 right-6 p-4 glass-panel border border-white/10 z-20">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono text-white/40 uppercase">
-              Cluster Status
-            </span>
-            <span className="text-[10px] font-mono text-primary uppercase">
-              All Systems Nominal
-            </span>
-          </div>
-          <div className="mt-2 h-1 bg-white/5 w-full">
-            <div className="h-full bg-primary w-4/5" />
-          </div>
-        </div>
-
+        {/* Single Live Status panel — one is distinctive, two is template */}
         <div className="absolute top-6 left-6 right-6 p-4 glass-panel border border-white/10 z-20">
           <div className="flex items-center gap-2 mb-2">
             <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-            <span className="text-[10px] font-mono text-white/60 uppercase tracking-widest">
+            <span className="text-xs font-mono text-white/60 uppercase tracking-widest">
               Live Status
             </span>
           </div>
-          <div className="font-mono text-[11px] text-primary/90 leading-relaxed">
-            <span className="text-primary">$</span> Currently building:
-            High-performance distributed key-value store in Rust
+          <div className="font-mono text-xs text-primary/90 leading-relaxed">
+            <span className="text-primary">$</span> {hero.liveStatusText}
             <span className="inline-block w-1.5 h-3 bg-primary/50 ml-1 animate-pulse align-middle" />
           </div>
         </div>

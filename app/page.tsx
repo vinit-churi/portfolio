@@ -4,6 +4,8 @@ import ExpertiseSection from "@/components/ExpertiseSection";
 import ActivitySection from "@/components/ActivitySection";
 import EvolutionSection from "@/components/EvolutionSection";
 import JournalSection from "@/components/JournalSection";
+import ProjectsSection from "@/components/ProjectsSection";
+import ResearchSection from "@/components/ResearchSection";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -15,6 +17,8 @@ export default function Home() {
         <ExpertiseSection />
         <ActivitySection />
         <EvolutionSection />
+        <ProjectsSection />
+        <ResearchSection />
         <JournalSection />
       </main>
       <Footer />

@@ -19,7 +19,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Portfolio — The Monochrome Architect",
+  title: "Vinit Churi — vinit.dev",
   description:
     "Curiosity-driven engineering. Building for resilience and precision.",
 };

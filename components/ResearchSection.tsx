@@ -1,42 +1,38 @@
 import Image from "next/image";
 import { db } from "@/lib/db";
-import { journalArticles } from "@/lib/schema";
+import { research } from "@/lib/schema";
 import { asc, eq } from "drizzle-orm";
 
-export default async function JournalSection() {
-  const articles = await db
+export default async function ResearchSection() {
+  const all = await db
     .select()
-    .from(journalArticles)
-    .where(eq(journalArticles.published, true))
-    .orderBy(asc(journalArticles.sortOrder));
+    .from(research)
+    .where(eq(research.published, true))
+    .orderBy(asc(research.sortOrder));
+
+  if (all.length === 0) return null;
 
   return (
-    <section id="journal" className="max-w-7xl mx-auto px-8 py-16 bg-background">
+    <section className="max-w-7xl mx-auto px-8 py-16 bg-surface">
       <div className="flex justify-between items-end mb-10">
         <div>
           <h2 className="text-xs uppercase tracking-[0.3em] text-outline mb-2 font-bold">
-            Insights
+            Thinking
           </h2>
           <h3 className="font-headline text-3xl font-bold text-white tracking-tight">
-            Journal &amp; Research
+            Research
           </h3>
         </div>
-        <a
-          href="#journal"
-          className="text-xs font-bold uppercase tracking-widest text-primary border-b border-primary/50 pb-1 hover:border-primary transition-all"
-        >
-          View All Entries
-        </a>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {articles.map((article) => (
-          <article key={article.id} className="group">
+        {all.map((entry) => (
+          <article key={entry.id} className="group">
             <div className="aspect-video bg-surface-container overflow-hidden mb-4 border border-white/5 relative">
-              {article.image && (
+              {entry.image && (
                 <Image
-                  src={article.image}
-                  alt={article.imageAlt}
+                  src={entry.image}
+                  alt={entry.imageAlt}
                   fill
                   className="object-cover grayscale group-hover:scale-105 transition-transform duration-500 opacity-80"
                 />
@@ -44,14 +40,14 @@ export default async function JournalSection() {
             </div>
             <div className="space-y-2">
               <div className="flex gap-4 text-xs text-outline font-mono uppercase">
-                <span>{article.date}</span>
-                <span>{article.tag}</span>
+                <span>{entry.date}</span>
+                <span>{entry.tag}</span>
               </div>
               <h4 className="font-headline font-bold text-white group-hover:text-primary transition-colors leading-snug">
-                {article.title}
+                {entry.title}
               </h4>
               <p className="text-xs text-on-surface-variant line-clamp-2">
-                {article.excerpt}
+                {entry.excerpt}
               </p>
             </div>
           </article>

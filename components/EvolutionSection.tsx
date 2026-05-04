@@ -1,33 +1,15 @@
-type Role = {
-  period: string;
-  title: string;
-  description: string;
-};
+import { db } from "@/lib/db";
+import { workRoles } from "@/lib/schema";
+import { asc } from "drizzle-orm";
 
-const roles: Role[] = [
-  {
-    period: "2021 — PRESENT",
-    title: "Principal Backend Engineer @ QuantLogix",
-    description:
-      "Spearheading the core matching engine rewrite in Rust, achieving sub-millisecond execution times. Managed a team of 12 engineers across 3 timezones.",
-  },
-  {
-    period: "2018 — 2021",
-    title: "Senior Systems Architect @ DataLayer",
-    description:
-      "Designed and implemented a distributed event-streaming platform handling 50TB of daily telemetry data using Kafka and Go.",
-  },
-  {
-    period: "2015 — 2018",
-    title: "Software Engineer @ OpenSource Foundries",
-    description:
-      "Early contributor to several CNCF projects. Focused on container runtime security and eBPF observability tools.",
-  },
-];
+export default async function EvolutionSection() {
+  const roles = await db
+    .select()
+    .from(workRoles)
+    .orderBy(asc(workRoles.sortOrder));
 
-export default function EvolutionSection() {
   return (
-    <section className="bg-surface py-16 border-y border-white/5">
+    <section id="work" className="bg-surface py-16 border-y border-white/5">
       <div className="max-w-7xl mx-auto px-8">
         <h3 className="font-headline text-3xl font-bold text-white mb-10 tracking-tight text-center md:text-left">
           Evolution
@@ -36,7 +18,7 @@ export default function EvolutionSection() {
         <div className="space-y-1">
           {roles.map((role) => (
             <div
-              key={role.title}
+              key={role.id}
               className="flex flex-col md:flex-row group border-b border-white/5 pb-6 pt-6 first:pt-0 last:border-0 hover:bg-white/[0.02] transition-colors px-4"
             >
               <div className="md:w-1/4 text-outline font-mono text-xs pt-1">

@@ -1,51 +1,17 @@
-type ExpertiseItem = {
-  icon: string;
-  title: string;
-  description: string;
-  tags: string[];
-  bg: string;
-};
+import { db } from "@/lib/db";
+import { expertiseItems } from "@/lib/schema";
+import { asc } from "drizzle-orm";
 
-const items: ExpertiseItem[] = [
-  {
-    icon: "hub",
-    title: "Distributed Systems",
-    description:
-      "High-availability microservices architecture with gRPC and event-driven patterns.",
-    tags: ["Raft", "Kafka"],
-    bg: "bg-surface",
-  },
-  {
-    icon: "speed",
-    title: "High Concurrency",
-    description:
-      "Optimization of data pipelines processing 1M+ req/sec using lock-free structures.",
-    tags: ["Goroutines", "Redis"],
-    bg: "bg-surface-container-low",
-  },
-  {
-    icon: "database",
-    title: "Data Science & Integrations",
-    description:
-      "Complex ETL processes and vector database implementation for LLM contexts.",
-    tags: ["Pinecone", "Spark"],
-    bg: "bg-surface",
-  },
-  {
-    icon: "view_quilt",
-    title: "Modern Frontend",
-    description:
-      "Internal tooling using React and Tailwind with deep state management focus.",
-    tags: ["Next.js", "Zustand"],
-    bg: "bg-surface-container-low",
-  },
-];
+export default async function ExpertiseSection() {
+  const items = await db
+    .select()
+    .from(expertiseItems)
+    .orderBy(asc(expertiseItems.sortOrder));
 
-export default function ExpertiseSection() {
   return (
-    <section className="bg-surface-container-lowest py-16">
+    <section id="expertise" className="bg-surface-container-lowest py-16">
       <div className="max-w-7xl mx-auto px-8">
-        <div className="mb-12 flex justify-between items-end">
+        <div className="mb-10 flex justify-between items-end">
           <div>
             <h2 className="text-xs uppercase tracking-[0.3em] text-outline mb-2 font-bold">
               Expertise
@@ -54,35 +20,64 @@ export default function ExpertiseSection() {
               Technical Verticals
             </h3>
           </div>
+          <span className="font-mono text-xs text-outline/40 tabular-nums">
+            {String(items.length).padStart(2, "0")} domains
+          </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-px bg-white/5">
-          {items.map((item) => (
-            <div
-              key={item.title}
-              className={`${item.bg} p-6 hover:bg-surface-container transition-colors`}
-            >
-              <span className="material-symbols-outlined text-primary mb-4 block">
-                {item.icon}
-              </span>
-              <h4 className="font-headline font-bold text-white mb-2">
-                {item.title}
-              </h4>
-              <p className="text-xs text-on-surface-variant leading-relaxed">
-                {item.description}
-              </p>
-              <div className="mt-6 flex flex-wrap gap-2">
-                {item.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-[9px] px-2 py-1 bg-surface-container-highest border border-white/5 uppercase"
-                  >
-                    {tag}
+        <div className="border-t border-white/5">
+          {items.map((item, index) => {
+            const tags: string[] = JSON.parse(item.tags);
+            return (
+              <div
+                key={item.id}
+                className="grid grid-cols-12 gap-4 md:gap-6 py-6 border-b border-white/5 group hover:bg-white/[0.015] transition-colors -mx-2 px-2"
+              >
+                {/* Index */}
+                <div className="hidden md:flex col-span-1 items-start pt-0.5">
+                  <span className="font-mono text-xs text-outline/30 tabular-nums select-none">
+                    {String(index + 1).padStart(2, "0")}
                   </span>
-                ))}
+                </div>
+
+                {/* Icon */}
+                <div className="col-span-1 md:col-span-1 flex items-start pt-0.5">
+                  <span
+                    className="material-symbols-outlined text-primary transition-transform duration-300 group-hover:scale-110"
+                    style={{ fontSize: "16px" }}
+                  >
+                    {item.icon}
+                  </span>
+                </div>
+
+                {/* Title */}
+                <div className="col-span-11 md:col-span-3 flex items-start">
+                  <h4 className="font-headline font-bold text-white text-sm md:text-base group-hover:text-primary transition-colors leading-tight">
+                    {item.title}
+                  </h4>
+                </div>
+
+                {/* Description */}
+                <div className="col-span-12 md:col-span-5 flex items-start -mt-3 md:mt-0 pl-6 md:pl-0">
+                  <p className="text-sm text-on-surface-variant leading-relaxed">
+                    {item.description}
+                  </p>
+                </div>
+
+                {/* Tags */}
+                <div className="col-span-12 md:col-span-2 flex flex-wrap gap-1.5 items-start justify-start md:justify-end pl-6 md:pl-0 -mt-2 md:mt-0">
+                  {tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="text-xs font-mono px-2 py-0.5 bg-surface-container-highest border border-white/5 uppercase tracking-wide"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
